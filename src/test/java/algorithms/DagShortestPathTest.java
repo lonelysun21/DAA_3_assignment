@@ -113,4 +113,38 @@ public class DagShortestPathTest {
         }
     }
 
+    @Test
+    void testMultipleSourcesAndNegativeWeights() {
+        Graph graph = new Graph(6, true);
+
+        graph.addEdge(0, 2, 5);
+        graph.addEdge(1, 2, -4);
+        graph.addEdge(2, 3, -2);
+        graph.addEdge(0, 3, 10);
+
+        DagShortestPath result = DagShortestPath.findPaths(graph);
+
+        assertEquals(0, result.getDistance(0));
+        assertEquals(0, result.getDistance(1));
+        assertEquals(-4, result.getDistance(2));
+        assertEquals(-6, result.getDistance(3));
+        assertEquals(0, result.getDistance(4));
+        assertEquals(0, result.getDistance(5));
+
+        assertEquals(List.of(1, 2, 3), result.getPath(3));
+        assertEquals(List.of(4), result.getPath(4));
+        assertEquals(List.of(5), result.getPath(5));
+    }
+
+    @Test
+    void testEmptyDag() {
+        Graph graph = new Graph(0, true);
+
+        DagShortestPath result = DagShortestPath.findPaths(graph);
+
+        assertEquals(0, result.getDistances().length);
+        assertEquals(0, result.getParents().length);
+    }
+
+
 }
