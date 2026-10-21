@@ -7,6 +7,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import graph.Edge;
+import java.util.Arrays;
+import java.util.Random;
+
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DagShortestPathTest {
@@ -47,4 +52,65 @@ public class DagShortestPathTest {
         assertThrows(IllegalStateException.class,
                 () -> DagShortestPath.findPaths(graph));
     }
+
+    @Test
+    void testRandomDagAgainstBellmanFord() {
+        Random random = new Random(42);
+
+        for (int t = 0; t < 50; t++) {
+            int n = 2 + random.nextInt(20);
+            Graph graph = new Graph(n, true);
+
+            for (int i = 0; i < n * 3; i++) {
+                int a = random.nextInt(n);
+                int b = random.nextInt(n);
+
+                if (a == b) {
+                    continue;
+                }
+
+                if (a > b) {
+                    int temp = a;
+                    a = b;
+                    b = temp;
+                }
+
+                int weight = random.nextInt(41) - 20;
+                graph.addEdge(a, b, weight);
+            }
+
+            int[] indegree = new int[n];
+            long[] expected = new long[n];
+            Arrays.fill(expected, Long.MAX_VALUE);
+
+            for (Edge edge : graph.getEdges()) {
+                indegree[edge.to]++;
+            }
+
+            for (int i = 0; i < n; i++) {
+                if (indegree[i] == 0) {
+                    expected[i] = 0;
+                }
+            }
+
+            for (int i = 0; i < n - 1; i++) {
+                for (Edge edge : graph.getEdges()) {
+                    if (expected[edge.from] == Long.MAX_VALUE) {
+                        continue;
+                    }
+
+                    long distance = expected[edge.from] + edge.weight;
+
+                    if (distance < expected[edge.to]) {
+                        expected[edge.to] = distance;
+                    }
+                }
+            }
+
+            DagShortestPath result = DagShortestPath.findPaths(graph);
+
+            assertArrayEquals(expected, result.getDistances());
+        }
+    }
+
 }
