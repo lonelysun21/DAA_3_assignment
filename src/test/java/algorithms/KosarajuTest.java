@@ -107,4 +107,24 @@ public class KosarajuTest {
         }
     }
 
+
+    @Test
+    void testLargeGraph() {
+        int n = 100000;
+        Graph graph = new Graph(n, true);
+
+        for (int i = 0; i < n - 1; i++) {
+            graph.addEdge(i, i + 1, 1);
+        }
+
+        List<List<Integer>> components = Kosaraju.findSCC(graph);
+
+        assertEquals(n, components.size());
+
+        for (List<Integer> component : components) {
+            assertEquals(1, component.size());
+        }
+    }
+
+
 }
