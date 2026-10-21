@@ -7,6 +7,9 @@ import graph.Graph;
 import java.util.Arrays;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class DagShortestPath {
     private final long[] distance;
     private final int[] parent;
@@ -53,6 +56,25 @@ public class DagShortestPath {
 
         return result;
     }
+
+    public List<Integer> getPath(int vertex) {
+        List<Integer> path = new ArrayList<>();
+
+        if (distance[vertex] == Long.MAX_VALUE) {
+            return path;
+        }
+
+        int current = vertex;
+
+        while (current != -1) {
+            path.add(current);
+            current = parent[current];
+        }
+
+        Collections.reverse(path);
+        return path;
+    }
+
 
     public long getDistance(int vertex) {
         return distance[vertex];
