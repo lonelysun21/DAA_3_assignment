@@ -1,4 +1,3 @@
-
 package algorithms;
 
 import graph.Graph;
@@ -7,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;
+import graph.Edge;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,4 +38,21 @@ public class KahnTest {
         assertThrows(IllegalArgumentException.class,
                 () -> Kahn.topologicalSort(graph));
     }
+
+    @Test
+    void testTopologicalOrder() throws Exception {
+        Graph graph = GraphReader.read("data/dag.txt");
+
+        List<Integer> order = Kahn.topologicalSort(graph);
+        int[] position = new int[graph.vertexCount()];
+
+        for (int i = 0; i < order.size(); i++) {
+            position[order.get(i)] = i;
+        }
+
+        for (Edge edge : graph.getEdges()) {
+            assertTrue(position[edge.from] < position[edge.to]);
+        }
+    }
+
 }
