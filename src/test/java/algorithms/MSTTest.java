@@ -77,4 +77,50 @@ public class MSTTest {
             assertEquals(1, prim.getComponents());
         }
     }
+
+    @Test
+    void testParallelEdgesAndSelfLoop() {
+        Graph graph = new Graph(4, false);
+
+        graph.addEdge(0, 1, 8);
+        graph.addEdge(0, 1, 2);
+        graph.addEdge(1, 1, -10);
+        graph.addEdge(1, 2, -3);
+
+        MSTResult kruskal = Kruskal.findMST(graph);
+        MSTResult prim = Prim.findMST(graph);
+
+        assertEquals(-1, kruskal.getTotalWeight());
+        assertEquals(-1, prim.getTotalWeight());
+        assertEquals(2, kruskal.getComponents());
+        assertEquals(2, prim.getComponents());
+        assertEquals(2, kruskal.getEdges().size());
+        assertEquals(2, prim.getEdges().size());
+    }
+
+    @Test
+    void testDirectedGraph() {
+        Graph graph = new Graph(3, true);
+        graph.addEdge(0, 1, 5);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> Kruskal.findMST(graph));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> Prim.findMST(graph));
+    }
+
+    @Test
+    void testEmptyGraph() {
+        Graph graph = new Graph(0, false);
+
+        MSTResult kruskal = Kruskal.findMST(graph);
+        MSTResult prim = Prim.findMST(graph);
+
+        assertEquals(0, kruskal.getTotalWeight());
+        assertEquals(0, prim.getTotalWeight());
+        assertEquals(0, kruskal.getComponents());
+        assertEquals(0, prim.getComponents());
+    }
+
 }
