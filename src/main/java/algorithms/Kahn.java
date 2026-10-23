@@ -1,8 +1,8 @@
-
 package algorithms;
 
 import graph.Edge;
 import graph.Graph;
+import metrics.Metrics;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -11,6 +11,10 @@ import java.util.List;
 public class Kahn {
 
     public static List<Integer> topologicalSort(Graph graph) {
+        return topologicalSort(graph, new Metrics());
+    }
+
+    public static List<Integer> topologicalSort(Graph graph, Metrics metrics) {
         if (!graph.isDirected()) {
             throw new IllegalArgumentException("Graph must be directed");
         }
@@ -37,6 +41,7 @@ public class Kahn {
             order.add(v);
 
             for (Edge edge : graph.neighbors(v)) {
+                metrics.addEdgeScan();
                 indegree[edge.to]--;
 
                 if (indegree[edge.to] == 0) {
