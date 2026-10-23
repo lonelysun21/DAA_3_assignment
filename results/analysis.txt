@@ -1,0 +1,47 @@
+Algorithm Complexity Analysis
+
+Kruskal (sparse)
+Edge scans slope: 1.055
+Scans per edge: 0.770 - 0.999
+DSU ops per edge: 3.191 - 4.121
+Comparison slope: 1.055
+
+Kruskal (dense)
+Edge scans slope: 1.119
+Scans per edge: 0.207 - 0.372
+DSU ops per edge: 0.855 - 1.513
+Comparison slope: 1.016
+
+Prim (sparse)
+Edge scans slope: 1.000
+Scans per edge: 2.000 - 2.000
+Comparison slope: 1.108
+
+Prim (dense)
+Edge scans slope: 1.000
+Scans per edge: 2.000 - 2.000
+Comparison slope: 1.090
+
+Kosaraju (sparse)
+Edge scans slope: 1.000
+Scans per edge: 2.000 - 2.000
+
+Kosaraju (dense)
+Edge scans slope: 1.000
+Scans per edge: 2.000 - 2.000
+
+Kahn (sparse)
+Edge scans slope: 1.000
+Scans per edge: 1.000 - 1.000
+
+Kahn (dense)
+Edge scans slope: 1.000
+Scans per edge: 1.000 - 1.000
+
+DagShortestPath (sparse)
+Edge scans slope: 1.000
+Scans per edge: 1.000 - 1.000
+
+DagShortestPath (dense)
+Edge scans slope: 1.000
+Scans per edge: 1.000 - 1.000
