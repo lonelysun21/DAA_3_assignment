@@ -87,3 +87,38 @@ plt.grid(True)
 plt.tight_layout()
 plt.savefig(folder / "scans_per_edge.png", dpi=150)
 plt.close()
+
+plt.figure(figsize=(9, 6))
+
+for density in ["sparse", "dense"]:
+    data = [
+        row for row in rows
+        if row["algorithm"] == "Kruskal"
+        and row["graph"].endswith(density)
+    ]
+
+    data.sort(key=lambda row: int(row["n"]))
+
+    sizes = [int(row["n"]) for row in data]
+    shares = [
+        int(row["edge_scans"]) / int(row["m"])
+        for row in data
+    ]
+
+    plt.plot(
+        sizes,
+        shares,
+        marker="o",
+        label=density
+    )
+
+plt.xscale("log")
+plt.ylim(0, 1.05)
+plt.xlabel("Number of vertices")
+plt.ylabel("Examined edges / m")
+plt.title("Kruskal Edge Examination")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.savefig(folder / "kruskal_edges.png", dpi=150)
+plt.close()
