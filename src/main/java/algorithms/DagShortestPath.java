@@ -1,14 +1,13 @@
-
 package algorithms;
 
 import graph.Edge;
 import graph.Graph;
-
-import java.util.Arrays;
-import java.util.List;
+import metrics.Metrics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class DagShortestPath {
     private final long[] distance;
@@ -23,6 +22,10 @@ public class DagShortestPath {
     }
 
     public static DagShortestPath findPaths(Graph graph) {
+        return findPaths(graph, new Metrics());
+    }
+
+    public static DagShortestPath findPaths(Graph graph, Metrics metrics) {
         List<Integer> order = Kahn.topologicalSort(graph);
         int n = graph.vertexCount();
         int[] indegree = new int[n];
@@ -40,11 +43,13 @@ public class DagShortestPath {
         }
 
         for (int v : order) {
-            if (result.distance[v] == Long.MAX_VALUE) {
-                continue;
-            }
-
             for (Edge edge : graph.neighbors(v)) {
+                metrics.addEdgeScan();
+
+                if (result.distance[v] == Long.MAX_VALUE) {
+                    continue;
+                }
+
                 long newDistance = result.distance[v] + edge.weight;
 
                 if (newDistance < result.distance[edge.to]) {
@@ -74,7 +79,6 @@ public class DagShortestPath {
         Collections.reverse(path);
         return path;
     }
-
 
     public long getDistance(int vertex) {
         return distance[vertex];
