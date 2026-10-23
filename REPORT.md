@@ -35,9 +35,33 @@ A directed acyclic graph has a topological ordering. Every edge goes from an ear
 
 ## 4. Measurements
 
-The benchmark uses graph sizes of 1,000, 3,162, 10,000, 31,623 and 100,000 vertices. Each size is tested with 4n and 20n edges. Every algorithm is executed five times, and the median execution time is recorded.
+The table below shows measured work divided by the expected complexity formula.
 
-Operation counts are used as the main evidence because they are more reproducible than execution times. The measured ratios and log-log slopes are calculated from `results/results.csv`.
+| Algorithm | Density | Ratio range |
+|---|---|---|
+| Kruskal | sparse | 1.020 - 1.240 |
+| Kruskal | dense | 0.756 - 0.980 |
+| Prim | sparse | 1.830 - 1.917 |
+| Prim | dense | 2.383 - 2.682 |
+| Kosaraju | sparse | 1.600 - 1.600 |
+| Kosaraju | dense | 1.905 - 1.905 |
+| Kahn | sparse | 0.800 - 0.800 |
+| Kahn | dense | 0.952 - 0.952 |
+| DagShortestPath | sparse | 0.800 - 0.800 |
+| DagShortestPath | dense | 0.952 - 0.952 |
+
+### Log-Log Slopes
+
+- Kosaraju (sparse), edge scans: 1.000
+- Kosaraju (dense), edge scans: 1.000
+- Kahn (sparse), edge scans: 1.000
+- Kahn (dense), edge scans: 1.000
+- DagShortestPath (sparse), edge scans: 1.000
+- DagShortestPath (dense), edge scans: 1.000
+- Kruskal (sparse), comparisons: 1.055
+- Kruskal (dense), comparisons: 1.016
+
+The traversal slopes can be compared with the expected linear slope of 1. Kruskal also requires sorting, so its comparison count includes a logarithmic factor.
 
 ## 5. Algorithm Choice
 
