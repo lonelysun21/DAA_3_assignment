@@ -61,4 +61,43 @@ public class GraphGenerator {
 
         return graph;
     }
+
+    public static Graph dag(int n, int m) {
+        Random random = new Random(42);
+        Graph graph = new Graph(n, true);
+
+        int[] rank = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            rank[i] = i;
+        }
+
+        for (int i = n - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            int temp = rank[i];
+            rank[i] = rank[j];
+            rank[j] = temp;
+        }
+
+        for (int i = 0; i < m; i++) {
+            int a = random.nextInt(n);
+            int b = random.nextInt(n);
+
+            while (a == b) {
+                b = random.nextInt(n);
+            }
+
+            if (rank[a] > rank[b]) {
+                int temp = a;
+                a = b;
+                b = temp;
+            }
+
+            int weight = 1 + random.nextInt(1000);
+            graph.addEdge(a, b, weight);
+        }
+
+        return graph;
+    }
+
 }
