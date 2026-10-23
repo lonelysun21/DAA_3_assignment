@@ -1,15 +1,20 @@
 package algorithms;
 
+import graph.Edge;
 import graph.Graph;
+import metrics.Metrics;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import graph.Edge;
 
 public class Kosaraju {
 
     public static List<Integer> finishOrder(Graph graph) {
+        return finishOrder(graph, new Metrics());
+    }
+
+    public static List<Integer> finishOrder(Graph graph, Metrics metrics) {
         if (!graph.isDirected()) {
             throw new IllegalArgumentException("Graph must be directed");
         }
@@ -27,16 +32,19 @@ public class Kosaraju {
 
             visited[i] = true;
             stack.push(i);
+            metrics.updateMaxDepth(stack.size());
 
             while (!stack.isEmpty()) {
                 int v = stack.peek();
 
                 if (next[v] < graph.neighbors(v).size()) {
-                    int to = graph.neighbors(v).get(next[v]++).to;
+                    Edge edge = graph.neighbors(v).get(next[v]++);
+                    metrics.addEdgeScan();
 
-                    if (!visited[to]) {
-                        visited[to] = true;
-                        stack.push(to);
+                    if (!visited[edge.to]) {
+                        visited[edge.to] = true;
+                        stack.push(edge.to);
+                        metrics.updateMaxDepth(stack.size());
                     }
                 } else {
                     order.add(stack.pop());
@@ -48,9 +56,12 @@ public class Kosaraju {
     }
 
     public static List<List<Integer>> findSCC(Graph graph) {
-        int n = graph.vertexCount();
-        List<Integer> order = finishOrder(graph);
+        return findSCC(graph, new Metrics());
+    }
 
+    public static List<List<Integer>> findSCC(Graph graph, Metrics metrics) {
+        int n = graph.vertexCount();
+        List<Integer> order = finishOrder(graph, metrics);
         Graph reversed = new Graph(n, true);
 
         for (Edge edge : graph.getEdges()) {
@@ -71,17 +82,19 @@ public class Kosaraju {
             List<Integer> component = new ArrayList<>();
             visited[start] = true;
             stack.push(start);
+            metrics.updateMaxDepth(stack.size());
 
             while (!stack.isEmpty()) {
                 int v = stack.pop();
                 component.add(v);
 
                 for (Edge edge : reversed.neighbors(v)) {
-                    int to = edge.to;
+                    metrics.addEdgeScan();
 
-                    if (!visited[to]) {
-                        visited[to] = true;
-                        stack.push(to);
+                    if (!visited[edge.to]) {
+                        visited[edge.to] = true;
+                        stack.push(edge.to);
+                        metrics.updateMaxDepth(stack.size());
                     }
                 }
             }
@@ -91,5 +104,4 @@ public class Kosaraju {
 
         return components;
     }
-
 }
